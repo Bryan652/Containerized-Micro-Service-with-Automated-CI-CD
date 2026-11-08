@@ -41,6 +41,11 @@ jobs:
           docker ps
           # Verification Both the web and db containers are healthy "Up" status in logs
 
+      - name: Run Linter (Ruff)
+        run: |
+          docker compose run --rm web ruff check .
+          # Verification: Ruff scans python files and exits with code 0 if no lint errors are found
+
       - name: Run Unit Tests
         run: |
           docker compose run --rm web env PYTHONPATH=. pytest
