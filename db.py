@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 conn = psycopg2.connect(host=os.getenv("DB_HOST"),
-                        dbname=os.getenv("DB_NAME"),
-                        user=os.getenv("DB_USER"),
-                        password=os.getenv("DB_PASSWORD"),
+                        dbname=os.getenv("POSTGRES_NAME"),
+                        user=os.getenv("POSTGRES_USER"),
+                        password=os.getenv("POSTGRES_PASSWORD"),
                         port=int(os.getenv("DB_PORT")))
 
 def CreateTable():

@@ -1,9 +1,8 @@
-
 # Theres this thing called cache that will skip if nothing changes so for example 
 # that python and workdir since it will always be like that skip that all on second build onwards
 
 # Official python image from dockerhub. If your not using python. For example java you can use openjdk:17-jdk-slim or node:18-slim etc.
-FROM python:3.10-slim
+FROM python:3.10-slim 
 
 # Set the working directory inside the container and only run commands there
 WORKDIR /app
