@@ -1,8 +1,6 @@
 import pytest
-
 from API import BookAPI
 from db import ConnToData, CreateTable
-
 
 @pytest.fixture
 def client():
@@ -12,33 +10,21 @@ def client():
         yield client
 
 def test_get_route(client):
-    print("\n\nHome")
-    print("="*20)
-    print("Loading Home..")
     response = client.get("/")
     assert response.status_code == 200
-    print("Home successfully loaded")
-    print("="*20)
 
 def test_add_book_route(client):
-    print("\n\nAdding book")
-    print("="*20)
-    print("Adding books")
-    
     response = client.post("/Add", data={
-        "Name": "Test add",
+        "Name": "Test Name Add",
         "Year": "2026-01-01",
-        "Author": "Bryan"
+        "Author": "Test Auth Add"
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    print("Data added successfully via POST")
-    print("="*20)
+    assert b"Test Name Add" in response.data
+    assert b"Test Auth Add" in response.data
 
 def test_update_route(client):
-    print("\n\nUpdating a book")
-    print("="*20)
-
     response = client.post("/Add", data={
         "Name": "Test add",
         "Year": "2026-01-01",
@@ -49,23 +35,20 @@ def test_update_route(client):
     book_id = books[-1]["id"]
 
     response = client.post(f"/Update/{ book_id }", data={
-        "Name":"Updated Name",
+        "Name":"Test Updated Name",
         "Year":"2026-03-03",
-        "Author":"Updated Bryan"
+        "Author":"Test Updated Bryan"
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    print("Updated successfully via POST")
-    print("="*20)
+    assert b"Test Updated Name" in response.data
+    assert b"Test Updated Bryan" in response.data
 
 def test_delete_route(client):
-    print("\n\nUpdating a book")
-    print("="*20)
-
     response = client.post("/Add", data={
-            "Name": "Test add",
+            "Name": "Test Remove Data",
             "Year": "2026-01-01",
-            "Author": "Bryan"
+            "Author": "Test Remove Auth Bryan"
     }, follow_redirects=True)
 
     books = ConnToData(0)
@@ -74,5 +57,5 @@ def test_delete_route(client):
     response = client.post(f"/Delete/{book_id}", follow_redirects=True)
 
     assert response.status_code == 200
-    print("Deleted successfully via POST")
-    print("="*20)
+    assert b"Test Remove Data" not in response.data
+    assert b"Test Remove Auth Bryan" not in response.data
