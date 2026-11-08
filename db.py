@@ -1,3 +1,4 @@
+import os
 import psycopg2
 from flask import jsonify
 from psycopg2.extras import RealDictCursor
@@ -5,11 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-conn = psycopg2.connect(host="DB_HOST", 
-                        dbname="DB_NAME", 
-                        user="DB_USER", 
-                        password="DB_PASSWORD", # That was a example pass last time :)
-                        port="DB_PORT")
+conn = psycopg2.connect(host=os.getenv("DB_HOST"),
+                        dbname=os.getenv("DB_NAME"),
+                        user=os.getenv("DB_USER"),
+                        password=os.getenv("DB_PASSWORD"),
+                        port=int(os.getenv("DB_PORT")))
 
 def CreateTable():
     with conn:

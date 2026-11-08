@@ -1,2 +1,4 @@
 .env
+.test_env
+.test.env
 __pycache__

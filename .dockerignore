@@ -1,1 +1,8 @@
 # Files will be ignored here
+.env
+__pycache__
+.git
+.pytest_cache
+README.md
+Dockerfile
+docker-compose.yml
