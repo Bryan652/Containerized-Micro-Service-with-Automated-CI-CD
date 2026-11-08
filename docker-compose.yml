@@ -12,6 +12,7 @@ services:
     depends_on:
       db: 
         condition: service_healthy
+    # volumes: - ./App
 
   db: # This has no build . so it won't use dockerfile
     image: postgres:15

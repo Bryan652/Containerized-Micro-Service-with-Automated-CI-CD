@@ -1,5 +1,6 @@
-import pytest
 import psycopg2.errors
+import pytest
+
 from db import ConnToData, CreateTable, conn
 
 
