@@ -1,8 +1,6 @@
-version: '3.8'
-
 services: 
   web:
-    build: . # use dockerfile
+    build: . # use dockerfile. You can nest this btw like build: ./path/to/dockerfile
     image: book-api
     container_name: book-api-container
     ports:

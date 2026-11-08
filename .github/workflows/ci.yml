@@ -1,0 +1,34 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+jobs:
+  test:
+    run-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Buid and Start Containers
+        run: |
+          docker compose up --build -d
+
+      - name: Check Container Status
+        run: |
+          docker ps
+          # Verification Both the web and db containers are healthy "Up" status in logs
+
+      - name: Run Unit Tests
+        run: |
+          docker compose run --rm web env PYTHONPATH=. pytest
+          # Verification Test done and returns green
+
+      - name: Tear Down Containers
+        if: Always()
+        run: |
+          docker compose down -v
