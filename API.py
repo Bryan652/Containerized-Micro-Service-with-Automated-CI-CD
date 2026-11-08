@@ -1,3 +1,4 @@
+import psycopg2.errors
 from flask import Flask, jsonify, redirect, render_template, request, url_for
 
 from db import ConnToData
@@ -5,7 +6,7 @@ from db_seeder import seed_database
 
 BookAPI = Flask(__name__)
 
-# PUTE API
+# REST API
 @BookAPI.route("/api/books", methods=["GET"])
 def api_books():
     return jsonify(ConnToData(0))
@@ -31,10 +32,13 @@ def api_add_book():
     author = data.get("Author")
 
     if not name or not year or not author:
-        return jsonify({"error":"Missing required fields"})
+        return jsonify({"error":"Missing required fields"}), 400
 
-    ConnToData(cond=3, Name=name, Year=year, Author=author)
-
+    try:
+        ConnToData(cond=3, Name=name, Year=year, Author=author)
+    except psycopg2.DataError:
+        return jsonify({"Message" : "Invalid date/year format (YYYY-DD-MM)"}), 400
+    
     return jsonify({
         "Message": "Book added successfully",
         "data" : {
@@ -55,7 +59,12 @@ def api_update_specific_book(id):
     year = data.get("Year")
     author = data.get("Author")
 
-    ConnToData(cond=1, id=id, Name=name, Year=year, Author=author)
+    try:
+        updated = ConnToData(cond=1, id=id, Name=name, Year=year, Author=author)
+        if updated == 0:
+            return jsonify({"Message":f"No specific book with id {id} found"}), 404
+    except psycopg2.DataError:
+        return jsonify({"Message" : "Invalid date/year format (YYYY-DD-MM)"}), 400
 
     return jsonify({
         "Message": "Book updated successfully",
@@ -69,7 +78,9 @@ def api_update_specific_book(id):
     
 @BookAPI.route("/api/books/<int:id>", methods=["DELETE"])
 def api_delete_specific_book(id):
-    ConnToData(cond=2, id=id)
+    deleted = ConnToData(cond=2, id=id)
+    if deleted == 0:
+        return jsonify({"Message":f"No specific book with id {id} found"}), 404
 
     return jsonify({"Message":f"Book {id} successfully deleted"}), 200
 

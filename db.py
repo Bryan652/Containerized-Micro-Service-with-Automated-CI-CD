@@ -41,6 +41,9 @@ def UpdateDataFromTable(id, Name, Year, Author):
 def DeleteDataFromTable(id):
     with conn, conn.cursor() as cur:
         cur.execute("DELETE FROM tbl_books WHERE id = %s;", (id,))
+        if cur.rowcount == 0:
+            return 0
+    return 1
 
 def AddDataFromTable(Name, Year, Author):
     with conn, conn.cursor() as cur:
@@ -56,6 +59,6 @@ def ConnToData(cond, id=None, Name=None, Year=None, Author=None):
     if cond == 1:
         UpdateDataFromTable(id, Name, Year, Author)
     if cond == 2:
-        DeleteDataFromTable(id)
+        return DeleteDataFromTable(id)
     if cond == 3:
         AddDataFromTable(Name, Year, Author)
