@@ -1,9 +1,10 @@
 import pytest
 from API import BookAPI
-from db import ConnToData
+from db import ConnToData, CreateTable
 
 @pytest.fixture
 def client():
+    CreateTable()
     BookAPI.config["TESTING"] = True
     with BookAPI.test_client() as client:
         yield client
