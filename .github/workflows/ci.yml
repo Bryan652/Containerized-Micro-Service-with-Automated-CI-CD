@@ -16,9 +16,9 @@ jobs:
 
       - name: Create .env for CI
         run: |
-          cp .env.example .env
+          cp .env.ci .env
 
-      - name: Buid and Start Containers
+      - name: Build and Start Containers
         run: |
           docker compose up --build -d
 
