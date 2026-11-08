@@ -1,5 +1,7 @@
 import pytest
-from db import CreateTable, ConnToData, conn
+
+from db import ConnToData, CreateTable, conn
+
 
 # This will loop everytime as it is autouse=True
 # Just for cleanup of data, so that test1 wont interfere with test2 kind like that
@@ -8,9 +10,8 @@ def test_dbcreation():
     CreateTable()   
     yield
 
-    with conn:
-        with conn.cursor() as cur:
-            cur.execute("DELETE FROM tbl_books;")
+    with conn, conn.cursor() as cur:
+        cur.execute("DELETE FROM tbl_books;")
 
 # -- Testing -- 
 

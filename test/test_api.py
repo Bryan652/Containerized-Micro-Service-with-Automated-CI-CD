@@ -1,6 +1,8 @@
 import pytest
+
 from API import BookAPI
 from db import ConnToData, CreateTable
+
 
 @pytest.fixture
 def client():

@@ -1,7 +1,6 @@
 import os
+
 import psycopg2
-from flask import jsonify
-from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,9 +12,8 @@ conn = psycopg2.connect(host=os.getenv("DB_HOST"),
                         port=int(os.getenv("DB_PORT")))
 
 def CreateTable():
-    with conn:
-        with conn.cursor() as cur:
-            cur.execute("""
+    with conn, conn.cursor() as cur:
+        cur.execute("""
                     CREATE TABLE IF NOT EXISTS tbl_books (
                     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                     Name VARCHAR(255),
@@ -30,9 +28,8 @@ def GetDataFromTable():
     return data
 
 def UpdateDataFromTable(id, Name, Year, Author):
-    with conn:
-        with conn.cursor() as cur:
-            cur.execute("""
+    with conn, conn.cursor() as cur:
+        cur.execute("""
                 UPDATE tbl_books 
                 SET 
                     Name = %s,
@@ -42,14 +39,12 @@ def UpdateDataFromTable(id, Name, Year, Author):
             """, (Name, Year, Author, id))
 
 def DeleteDataFromTable(id):
-    with conn:
-        with conn.cursor() as cur:
-            cur.execute("DELETE FROM tbl_books WHERE id = %s;", (id,))
+    with conn, conn.cursor() as cur:
+        cur.execute("DELETE FROM tbl_books WHERE id = %s;", (id,))
 
 def AddDataFromTable(Name, Year, Author):
-    with conn:
-        with conn.cursor() as cur:
-            cur.execute("""
+    with conn, conn.cursor() as cur:
+        cur.execute("""
                 INSERT INTO tbl_books (Name, Year, Author)
                 VALUES (%s, %s, %s)
             """, (Name, Year, Author))

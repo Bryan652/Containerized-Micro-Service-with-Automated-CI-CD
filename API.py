@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, redirect, render_template, request, url_for
+
 from db import ConnToData
 from db_seeder import seed_database
 

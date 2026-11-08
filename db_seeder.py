@@ -1,4 +1,4 @@
-from db import conn, CreateTable
+from db import CreateTable, conn
 
 INITIAL_BOOKS = [
     ("Children of Time", "2012-05-22", "Adrian Tchaikovsky"),
@@ -11,19 +11,18 @@ INITIAL_BOOKS = [
 def seed_database():
     CreateTable()
 
-    with conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT COUNT (*) FROM tbl_books;")
-            count = cur.fetchone()[0]
+    with conn, conn.cursor() as cur:
+        cur.execute("SELECT COUNT (*) FROM tbl_books;")
+        count = cur.fetchone()[0]
 
-            if count > 0:
-                print(f"Database already contains {count} data. Skipping seeding.")
-                return
+        if count > 0:
+            print(f"Database already contains {count} data. Skipping seeding.")
+            return
 
-            print("Seeding initial data")
-            cur.executemany("""
+        print("Seeding initial data")
+        cur.executemany("""
                 INSERT INTO tbl_books (Name, Year, Author) 
                 VALUES (%s, %s, %s)
             """, INITIAL_BOOKS)
 
-            print(f"successfully seeded {len(INITIAL_BOOKS)} data into postgresql")
+        print(f"successfully seeded {len(INITIAL_BOOKS)} data into postgresql")
