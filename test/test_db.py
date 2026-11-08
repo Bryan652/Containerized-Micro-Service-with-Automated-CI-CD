@@ -30,7 +30,7 @@ def testp_add():
 
 def testn_add():
     print("\n[Negative] Wrong input test")
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         ConnToData(3, Name="Bryan's Book", Year="2026", Author="Yowzki")
     print("Input correctly rejected")   
     print("="*20)
