@@ -1,7 +1,5 @@
 # Containerized Book API with Automated CI
 
-![CI](https://github.com/Bryan652/Containerized-Micro-Service-with-Automated-CI/actions/workflows/ci.yml/badge.svg)
-
 A Flask REST API backed by PostgreSQL, packaged with Docker and tested automatically on every push and pull request with GitHub Actions. Broken code can't reach `main`: if linting or tests fail, the merge is blocked.
 
 ## Architecture
