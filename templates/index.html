@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Library Microservice</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+    <style>
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="container">
+
+    <header style="margin-bottom: 2rem;">
+        <h2>Books Library</h2>
+        <p><small>Containerized Microservice Demo</small></p>
+    </header>
+
+    <main>
+        <!-- Add Book Section -->
+        <section style="margin-bottom: 3rem;">
+            <h3>Add New Book</h3>
+            <form action="{{ url_for('Add') }}" method="POST">
+                <div class="grid">
+                    <input type="text" name="Name" placeholder="Book Title" required>
+                    <input type="text" name="Author" placeholder="Author Name" required>
+                    <input type="date" name="Year" required>
+                    <button type="submit">Add Book</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Books Table Section -->
+        <section>
+            <h4>Search</h4>
+            <input type="text" id="searchInput" placeholder="IDK Search bruh" onkeyup="filterBooks()">
+            <h3>Manage Books</h3>
+            {% if datas %}
+                <table> 
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in datas %} <!-- IF there is no data -->
+                            <tr class="book-item">
+                                <td>{{ data.id }}</td>
+                                
+                                <form action="{{ url_for('Update', id=data.id) }}" method="POST">
+                                    <td><input type="text" name="Name" value="{{ data.name }}" required></td>
+                                    <td><input type="text" name="Author" value="{{ data.author }}" required></td>
+                                    <td><input type="date" name="Year" value="{{ data.year }}" required></td>
+                                    
+                                    <td>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button type="submit" style="padding: 6px 12px; margin: 0;">Update</button>
+                                </form>
+
+                                            <form action="{{ url_for('Delete', id=data.id) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this book?');">
+                                                <button type="submit" class="contrast" style="padding: 6px 12px; margin: 0;">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No books found in the database. Would you like to seed?</p>
+                <form action="{{ url_for('Seed') }}" method="POST">
+                    <button type="submit">Seed Database</button>
+                </form>
+            {% endif %}
+        </section>
+    </main>
+
+    <script>
+        function filterBooks() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const items = document.querySelectorAll('.book-item');
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
