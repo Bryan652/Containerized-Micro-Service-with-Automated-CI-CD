@@ -29,6 +29,13 @@ jobs:
         run: |
           docker compose up --build -d
 
+      # Wait for the database to be ready before running tests
+      - name: Wait for Database
+        run: |
+          echo "Waiting for PostgreSQL to accept connections..."
+          docker compose exec -T db sh -c "until pg_isready -U postgres; do sleep 1; done"
+          # Verification: The loop exits successfully once PostgreSQL responds as ready.
+
       - name: Check Container Status
         run: |
           docker ps
