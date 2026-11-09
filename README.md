@@ -115,11 +115,11 @@ docker-compose.yml         API + PostgreSQL + healthcheck
  
 ## Roadmap
  
-- [x] Containerized Flask app + PostgreSQL
-- [x] CI with Ruff and PyTest on every push and PR
-- [x] REST API with JSON endpoints
-- [ ] Deploy to AWS with Terraform + continuous deployment
-- [ ] Monitoring with Prometheus and Grafana
+| Stage | What | Status |
+|---|---|---|
+| 1 | Containerized Flask app + PostgreSQL, CI with Ruff + PyTest, REST API | ✅ Done |
+| 2 | Deploy to AWS with Terraform + continuous deployment | 🚧 Next |
+| 3 | Monitoring with Prometheus and Grafana | ⏳ Planned |
 
 ```
                                           ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣾⠀
