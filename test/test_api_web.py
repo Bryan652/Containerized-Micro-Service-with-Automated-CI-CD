@@ -33,28 +33,32 @@ def test_update_route(client):
         "Author": "Bryan"
     }, follow_redirects=True)
 
+    assert response.status_code == 200
+
     books = ConnToData(0)
     book_id = books[-1]["id"]
 
-    response = client.post(f"/update/{ book_id }", data={
+    response_update = client.post(f"/update/{ book_id }", data={
         "Name":"Test Updated Name",
         "Year":"2026-03-03",
         "Author":"Test Updated Bryan"
     }, follow_redirects=True)
 
-    assert response.status_code == 200
-    assert b"Test Updated Name" in response.data
-    assert b"Test Updated Bryan" in response.data
+    assert response_update.status_code == 200
+    assert b"Test Updated Name" in response_update.data
+    assert b"Test Updated Bryan" in response_update.data
 
 def test_delete_route(client):
-    response = client.post("/add", data={
-            "Name": "Test Remove Data",
-            "Year": "2026-01-01",
-            "Author": "Test Remove Auth Bryan"
+    add_response = client.post("/add", data={
+        "Name": "Test Remove Data",
+        "Year": "2026-01-15",
+        "Author": "Test Remove Auth Bryan",
     }, follow_redirects=True)
 
-    books = ConnToData(0)
-    book_id = books[-1]["id"]
+    assert add_response.status_code == 200
+    assert b"Test Remove Data" in add_response.data   # proves it exists first
+
+    book_id = next(b["id"] for b in ConnToData(0) if b["name"] == "Test Remove Data")
 
     delete_response = client.post(f"/delete/{book_id}", follow_redirects=True)
 
