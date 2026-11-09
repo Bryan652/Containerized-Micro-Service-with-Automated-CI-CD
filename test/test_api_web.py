@@ -11,10 +11,6 @@ def client():
     with BookAPI.test_client() as client:
         yield client
 
-# NO UI
-
-
-# WITH UI
 def test_get_route(client):
     response = client.get("/")
     assert response.status_code == 200
@@ -60,8 +56,12 @@ def test_delete_route(client):
     books = ConnToData(0)
     book_id = books[-1]["id"]
 
-    response = client.post(f"/delete/{book_id}", follow_redirects=True)
+    delete_response = client.post(f"/delete/{book_id}", follow_redirects=True)
 
-    assert response.status_code == 200
-    assert b"Test Remove Data" not in response.data
-    assert b"Test Remove Auth Bryan" not in response.data
+    assert delete_response.status_code == 200
+    assert b"Test Remove Data" not in delete_response.data
+    assert b"Test Remove Auth Bryan" not in delete_response.data
+
+# For Failed test
+# def test_failed():
+#     assert 10 == 1

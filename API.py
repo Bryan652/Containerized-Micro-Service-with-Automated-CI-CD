@@ -35,13 +35,14 @@ def api_add_book():
         return jsonify({"error":"Missing required fields"}), 400
 
     try:
-        ConnToData(cond=3, Name=name, Year=year, Author=author)
+        id = ConnToData(cond=3, Name=name, Year=year, Author=author)
     except psycopg2.DataError:
-        return jsonify({"Message" : "Invalid date/year format (YYYY-DD-MM)"}), 400
+        return jsonify({"error" : "Invalid date/year format (YYYY-DD-MM)"}), 400
     
     return jsonify({
         "Message": "Book added successfully",
         "data" : {
+            "id": id,
             "Name":name,
             "Year":year,
             "Author":author
@@ -62,9 +63,9 @@ def api_update_specific_book(id):
     try:
         updated = ConnToData(cond=1, id=id, Name=name, Year=year, Author=author)
         if updated == 0:
-            return jsonify({"Message":f"No specific book with id {id} found"}), 404
+            return jsonify({"error":f"No specific book with id {id} found"}), 404
     except psycopg2.DataError:
-        return jsonify({"Message" : "Invalid date/year format (YYYY-DD-MM)"}), 400
+        return jsonify({"error" : "Invalid date/year format (YYYY-DD-MM)"}), 400
 
     return jsonify({
         "Message": "Book updated successfully",
@@ -80,7 +81,7 @@ def api_update_specific_book(id):
 def api_delete_specific_book(id):
     deleted = ConnToData(cond=2, id=id)
     if deleted == 0:
-        return jsonify({"Message":f"No specific book with id {id} found"}), 404
+        return jsonify({"error":f"No specific book with id {id} found"}), 404
 
     return jsonify({"Message":f"Book {id} successfully deleted"}), 200
 

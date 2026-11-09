@@ -37,6 +37,9 @@ def UpdateDataFromTable(id, Name, Year, Author):
                     Author = %s
                 WHERE id = %s;
             """, (Name, Year, Author, id))
+        if cur.rowcount == 0:
+            return 0
+    return 1
 
 def DeleteDataFromTable(id):
     with conn, conn.cursor() as cur:
@@ -50,15 +53,18 @@ def AddDataFromTable(Name, Year, Author):
         cur.execute("""
                 INSERT INTO tbl_books (Name, Year, Author)
                 VALUES (%s, %s, %s)
+                RETURNING id;
             """, (Name, Year, Author))
+        new_id = cur.fetchone()[0]
+    return new_id
 
 # How to make this optional?? The id name year and author
 def ConnToData(cond, id=None, Name=None, Year=None, Author=None):
     if cond == 0:
         return GetDataFromTable() 
     if cond == 1:
-        UpdateDataFromTable(id, Name, Year, Author)
+        return UpdateDataFromTable(id, Name, Year, Author)
     if cond == 2:
         return DeleteDataFromTable(id)
     if cond == 3:
-        AddDataFromTable(Name, Year, Author)
+        return AddDataFromTable(Name, Year, Author)
