@@ -2,3 +2,12 @@
 .test_env
 .test.env
 __pycache__
+.pytest_cache/
+.ruff_cache/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log

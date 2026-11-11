@@ -144,4 +144,3 @@ def test_api_delete_wrong_id_route(client):
     data = delete_response.get_json()
     assert "error" in data
     assert data["error"] == f"No specific book with id {id} found"
-#endregion
